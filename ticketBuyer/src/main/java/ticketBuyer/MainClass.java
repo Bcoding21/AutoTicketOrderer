@@ -1,45 +1,24 @@
 package ticketBuyer;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-
 public class MainClass {
 	
-	private static final String TICKET_HASH = "#tickets";
-	private static final String EVENTBRITE_DOMAIN = "www.eventbrite.com";
-	private static final String EVENTBRITE_TICKET_PATH = "/e";
+	private static final String CHROME_DRIVER_PATH = "C:\\Users\\Brandon\\Downloads\\chromedriver_win32\\chromedriver.exe";
+	private static final String TICKET_URL = "https://www.eventbrite.com/e/alan-walker-w-sam-feldt-tickets-53596210709?aff=ebdshpmoodssection";
+	static {
+		System.setProperty("webdriver.chrome.driver", CHROME_DRIVER_PATH);
+	}
 	
-
 	public static void main(String[] args) {
 		
-		String ticketUrl = "https://www.eventbrite.com/e/katsucon-2019-online-registration-registration-43333913903?aff=ebdshpmoodssection"
-		
-		if (!isTicketUrl(ticketUrl)) {
-			System.out.println("Bad ticket format");
-			System.exit(0);
+		if ( !UrlValidator.isTicketUrl(TICKET_URL) ) {
+			System.out.println("Brandon");
 		}
-		
-		ticketUrl = addTicketHash(ticketUrl);
-		
-		
-		
-
+		else {
+			String ticketUrl = UrlValidator.addTicketHash(TICKET_URL);
+			TicketOrderer orderer = new TicketOrderer(ticketUrl);
+			System.out.println(orderer.getCheapestTicketId());
+			
+		}
 	}
 	
-	
-	private static String addTicketHash(String ticketUrl) {
-		return ticketUrl.contains(TICKET_HASH) ? 
-				ticketUrl : ticketUrl + TICKET_HASH;
-	}
-	
-	private static boolean isTicketUrl(String ticketUrl) {
-		try {
-			URL url = new URL(ticketUrl);
-			return url.getHost().equals(EVENTBRITE_DOMAIN)
-					&& url.getPath().equals(EVENTBRITE_TICKET_PATH);
-		} catch (MalformedURLException e) { }
-		return false;
-	}
-
-
 }
